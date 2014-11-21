@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/Allenice/ohaha/issues"
   },
-  "homepage": "https://github.com/Allenice/ohaha"
+  "homepage": "https://github.com/Allenice/ohaha",
+	"dependencies": {
+		"mockjs": "*",
+		"routes": "~1.2.0"
+	}
 }
