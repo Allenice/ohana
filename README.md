@@ -10,7 +10,7 @@ ohana
 ## 安装
 
 ```bash
-npm install ohaha
+npm install ohana
 ```
 
 ## 使用
@@ -50,7 +50,9 @@ server.listen(3000);
 匹配 GET 方式的请求。
 
  - path: 路由匹配地址
- - options: {delay: 延迟多少毫秒后返回，data: 返回的数据，可以接受对象和方法}
+ - options: 
+	 - delay: 延迟多少毫秒后返回，
+	 - data: 返回的数据，可以接受对象和方法, 方法中的参数 params 是路由匹配的参数，query 是提交或查询的参数。
 
 ### server.post(path, options）
 与 get 同理
