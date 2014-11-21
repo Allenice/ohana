@@ -1,5 +1,5 @@
 {
-  "name": "ohaha",
+  "name": "ohana",
   "version": "0.0.1",
   "description": "A simple server that return fake json data for test",
   "main": "index.js",
@@ -18,9 +18,9 @@
   "author": "Allenice Mo",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Allenice/ohaha/issues"
+    "url": "https://github.com/Allenice/ohana/issues"
   },
-  "homepage": "https://github.com/Allenice/ohaha",
+  "homepage": "https://github.com/Allenice/ohana",
 	"dependencies": {
 		"mockjs": "*",
 		"routes": "~1.2.0"
