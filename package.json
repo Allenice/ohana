@@ -1,0 +1,24 @@
+{
+  "name": "ohaha",
+  "version": "0.0.1",
+  "description": "A simple server that return fake json data for test",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Allenice/ohaha.git"
+  },
+  "keywords": [
+    "nodejs",
+    "server",
+    "fake-data"
+  ],
+  "author": "Allenice Mo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Allenice/ohaha/issues"
+  },
+  "homepage": "https://github.com/Allenice/ohaha"
+}
