@@ -21,6 +21,7 @@
 						"id|1-10000": 1,
 						"title": "@TITLE(5, 7)",
 						"author": "@NAME",
+						"brief": "中文测试",
 						"post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
 						"read_count|0-1000": 100
 					}
@@ -72,7 +73,7 @@
 		}
 	});
 
-	// 更新一篇文章
+	// 更新或添加一篇文章
 	server.put('/article/:id', {
 		data: function (params, query) {
 			return {
@@ -86,7 +87,23 @@
 				}
 			}
 		}
-	})
+	});
+
+ // 更新一篇文章
+	server.patch('/article/:id', {
+		data: function (params, query) {
+			return {
+				"status": "ok",
+				"data": {
+					"id|1-10000": 1,
+					"title": query.title,
+					"author": query.author,
+					"content": query.content,
+					"post_time": "@NOW"
+				}
+			}
+		}
+	});
 
 
 

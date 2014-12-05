@@ -60,6 +60,8 @@ server.listen(3000);
 与 get 同理
 ### server.put(path, options)
  与 get 同理
+### server.patch(path, options)
+与 get 同理
 
 ### server.listen(port, host)
  - port:  服务器监听的网络端口

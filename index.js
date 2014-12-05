@@ -68,6 +68,12 @@ Server.prototype = {
 		});
 	},
 
+	"patch": function (path, options) {
+		router.addRoute("patch" + path, function(req, res, match) {
+			handle(req, res, match, options);
+		});
+	},
+
 	/**
 	 * create http server
 	 * @param port
@@ -82,14 +88,15 @@ Server.prototype = {
 
 			// 查找匹配的路由
 			var match = router.match(req.method + path);
+			var header = {
+				'Content-Type': 'application/json; charset=utf-8',
+				'Access-Control-Allow-Origin': '*',
+				'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
+			};
 
 			if(match) {
 				// 允许跨域访问
-				res.writeHead(200, {
-					'Content-Type': 'application/json',
-					'Access-Control-Allow-Origin': '*',
-					'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT'
-				});
+				res.writeHead(200, header);
 
 				if(req.method === 'GET') {
 					match.query = url.parse(req.url, true).query || {};
@@ -107,7 +114,7 @@ Server.prototype = {
 					});
 				}
 			} else {
-				res.writeHead(404, {'Content-Type': 'application/json'});
+				res.writeHead(404, header);
 				res.end(JSON.stringify({status: 404}));
 			}
 
