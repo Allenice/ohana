@@ -81,7 +81,6 @@ Server.prototype = {
 	 */
 	listen: function (port, host) {
 		port = port || 8080;
-		host = host || '127.0.0.1';
 
 		http.createServer(function (req, res) {
 			var path = url.parse(req.url).pathname;
@@ -120,7 +119,7 @@ Server.prototype = {
 
 		}).listen(port, host);
 
-		console.log('Server running at http://'+ host +':'+ port +'/');
+		console.log('Server running at http://'+ (host||'localhost') +':'+ port +'/');
 	}
 }
 
