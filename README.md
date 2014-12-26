@@ -3,6 +3,7 @@ ohana
 一个返回模拟 json 数据的 http 服务器
 特点：
 
+
  - 使用 mockjs 生成 json 数据
  - 支持路由规则
  - 可跨域访问
@@ -53,6 +54,25 @@ server.listen(3000);
  - options: 
 	 - delay: 延迟多少毫秒后返回，
 	 - data: 返回的数据，可以接受对象和方法, 方法中的参数 params 是路由匹配的参数，query 是提交或查询的参数。
+	 
+```javascript
+server.get('/article/:id', {
+	data: function (params, query) {
+		return {
+			"status": "ok",
+			"data": {
+				"id": params.id,
+				"title": "@TITLE(5, 7)",
+				"author": "@NAME",
+				"post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
+				"content": "@PARAGRAPH(2)",
+				"poster": "@IMAGE('700x350', '#ccc', '#000', 'hello world')",
+				"read_count|0-1000": 100
+			}
+		}
+	}
+});
+```
 
 ### server.post(path, options）
 与 get 同理
@@ -63,7 +83,19 @@ server.listen(3000);
 ### server.patch(path, options)
 与 get 同理
 
-### server.listen(port, host)
+### server.register(apiList);
+注册 api
+
+- apiList:  api 模块列表
+
+```javascript
+server.register([
+	require('./article/index'),
+	require('./user/index')
+]);
+```
+
+### server.start(port, host)
  - port:  服务器监听的网络端口
  - host： 主机
 
