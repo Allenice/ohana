@@ -75,28 +75,48 @@ Server.prototype = {
 	},
 
 	/**
+	 * 注册 api
+	 * @param {Array[Function]} apiList - api 模块列表
+	 */
+	register: function (apiList) {
+		var self = this;
+
+		apiList.forEach(function (api) {
+			if(typeof api === 'function') {
+				api(self);
+			}
+		});
+	},
+
+	/**
 	 * create http server
 	 * @param port
-	 * @param host
+	 * @param [host]
 	 */
-	listen: function (port, host) {
+	start: function (port, host) {
 		port = port || 8080;
 
 		http.createServer(function (req, res) {
-			var path = url.parse(req.url).pathname;
+
+			var path = url.parse(req.url).pathname,
+					statusCode,
+					date = new Date(),
+					dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.toLocaleTimeString();
 
 			// 查找匹配的路由
-			var match = router.match(req.method + path);
-			var header = {
-				'Content-Type': 'application/json; charset=utf-8',
-				'Access-Control-Allow-Origin': '*',
-				'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
-			};
+			var match = router.match(req.method + path),
+					header = {
+					'Content-Type': 'application/json; charset=utf-8',
+					'Access-Control-Allow-Origin': '*',
+					'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
+				};
 
 			if(match) {
-				// 允许跨域访问
-				res.writeHead(200, header);
+				statusCode = 200;
+				console.log(req.method, statusCode, req.url, dateString);
 
+				// 允许跨域访问
+				res.writeHead(statusCode, header);
 				if(req.method === 'GET') {
 					match.query = url.parse(req.url, true).query || {};
 					match.fn(req, res, match);
@@ -113,9 +133,12 @@ Server.prototype = {
 					});
 				}
 			} else {
-				res.writeHead(404, header);
-				res.end(JSON.stringify({status: 404}));
+				statusCode = 404;
+				console.log(req.method, statusCode, req.url, dateString);
+				res.writeHead(statusCode, header);
+				res.end(JSON.stringify({status: statusCode}));
 			}
+
 
 		}).listen(port, host);
 

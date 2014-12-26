@@ -1,9 +1,11 @@
 
 var Server = require("../index.js");
-var article = require('./article/index');
 
 var server = new Server();
 
-article(server);
+server.register([
+	require('./article/index'),
+	require('./user/index')
+]);
 
-server.listen(3000);
+server.start(3000);
