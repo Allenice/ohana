@@ -21,8 +21,8 @@
     "url": "https://github.com/Allenice/ohana/issues"
   },
   "homepage": "https://github.com/Allenice/ohana",
-	"dependencies": {
-		"mockjs": "*",
-		"routes": "~1.2.0"
-	}
+  "dependencies": {
+    "mockjs": "*",
+    "routes": "~1.2.0"
+  }
 }
