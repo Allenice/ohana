@@ -5,8 +5,9 @@ ohana
 
 
  - 使用 mockjs 生成 json 数据
- - 支持路由规则
+ - RESTFul
  - 可跨域访问
+ - http 代理转发
 
 ## 安装
 
@@ -82,6 +83,50 @@ server.get('/article/:id', {
  与 get 同理
 ### server.patch(path, options)
 与 get 同理
+
+### server.proxy(path, option)
+代理请求
+
+ - path: 路由匹配地址
+ - options: 
+	 - urlRoot:  目标服务器请求根目录，
+	 - method:  请求类型，GET | POST | PUT | PATCH | DELETE
+	 
+
+	 
+```javascript
+server.proxy('/article/:id', {
+	urlRoot: 'http://localhost:3000',
+	method: DELETE
+});
+
+// 可以设置全局默认配置
+server.setProxyDefault({
+  urlRoot: 'http://localhost:3000',
+  method: 'GET'
+});
+
+// 之后可以省略配置
+server.proxy('/article/');
+
+server.proxy('/article/:id');
+
+server.proxy('/article/', {
+  method: 'POST'
+});
+
+server.proxy('/article/:id', {
+  method: 'DELETE'
+});
+
+server.proxy('/article/:id', {
+  method: 'PUT'
+});
+
+server.proxy('/article/:id', {
+  method: 'PATCH'
+});
+```
 
 ### server.register(apiList);
 注册 api

@@ -7,7 +7,7 @@ server.register([
 ]);
 
 server.setProxyDefault({
-  urlRoot: 'http://ourbp.sinaapp.com/api.php',
+  urlRoot: 'http://localhost:3000',
   method: 'GET'
 });
 
