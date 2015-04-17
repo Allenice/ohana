@@ -5,8 +5,9 @@ ohana
 
 
  - 使用 mockjs 生成 json 数据
- - 支持路由规则
+ - RESTFul
  - 可跨域访问
+ - http 代理转发
 
 ## 安装
 
@@ -83,6 +84,50 @@ server.get('/article/:id', {
 ### server.patch(path, options)
 与 get 同理
 
+### server.proxy(path, option)
+代理请求
+
+ - path: 路由匹配地址
+ - options: 
+	 - urlRoot:  目标服务器请求根目录，
+	 - method:  请求类型，GET | POST | PUT | PATCH | DELETE
+	 
+
+	 
+```javascript
+server.proxy('/article/:id', {
+	urlRoot: 'http://localhost:3000',
+	method: DELETE
+});
+
+// 可以设置全局默认配置
+server.setProxyDefault({
+  urlRoot: 'http://localhost:3000',
+  method: 'GET'
+});
+
+// 之后可以省略配置
+server.proxy('/article/');
+
+server.proxy('/article/:id');
+
+server.proxy('/article/', {
+  method: 'POST'
+});
+
+server.proxy('/article/:id', {
+  method: 'DELETE'
+});
+
+server.proxy('/article/:id', {
+  method: 'PUT'
+});
+
+server.proxy('/article/:id', {
+  method: 'PATCH'
+});
+```
+
 ### server.register(apiList);
 注册 api
 
@@ -99,41 +144,37 @@ server.register([
  - port:  服务器监听的网络端口
  - host： 主机
 
-## 路由匹配规则：
-Basic string:
+## 路由匹配规则：:
+字符串:
 
-    "/articles" will only match routes that == "/articles".
+    "/articles" 只会匹配到 "/articles"。 /articles/ 不会被匹配到。
 
-Named parameters:
+命名参数:
 
-    "/articles/:title" will only match routes like "/articles/hello", but *not* "/articles/".
+    "/articles/:title" 只会匹配到像"/articles/hello"的路由, 但是不会匹配到 "/articles/".
 
-Optional named parameters:
+可选参数:
 
-    "/articles/:title?" will match "/articles/hello" AND "/articles/"
+    "/articles/:title?" 匹配 "/articles/hello" 和 "/articles/"。
 
-Periods before optional parameters are also optional:
+可选参数前面的参数也是可选的:
 
-    "/:n.:f?" will match "/1" and "/1.json"
+    "/:n.:f?" 会匹配到 "/1" 和 "/1.json"
 
-Splaaaat! :
+星号（splat）:
 
-    "/assets/*" will match "/assets/blah/blah/blah.png" and "/assets/".
+    "/assets/*" 匹配到 "/assets/blah/blah/blah.png" 和 "/assets/".
 
-    "/assets/*.*" will match "/assets/1/2/3.js" as splats: ["1/2/3", "js"]
+    "/assets/*.*" 会匹配到 "/assets/1/2/3.js"， 并且有 splats: ["1/2/3", "js"]
 
-Mix splat with named parameters:
+星号和命名参数:
 
-    "/account/:id/assets/*" will match "/account/2/assets/folder.png" as params: {id: 2}, splats:["folder.png"]
+    "/account/:id/assets/*" 会匹配到 "/account/2/assets/folder.png"，并且有 params: {id: 2}, splats:["folder.png"]
 
 
-Named RegExp:
+正则表达式:
 
-    "/lang/:lang([a-z]{2})" will match "/lang/en" but not "/lang/12" or "/lang/eng"
-
-Raw RegExp:
-
-    /^\/(\d{2,3}-\d{2,3}-\d{4})\.(\w*)$/ (note no quotes, this is a RegExp, not a string.) will match "/123-22-1234.json". Each match group will be an entry in splats: ["123-22-1234", "json"]
+    "/lang/:lang([a-z]{2})" 会匹配到 "/lang/en", 但是不会匹配到 "/lang/12" 和 "/lang/eng"
 
 参考： https://github.com/aaronblohowiak/routes.js
 

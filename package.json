@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Allenice/ohana",
   "dependencies": {
     "mockjs": "*",
-    "routes": "~1.2.0"
+    "routes": "~1.2.0",
+    "request": "~2.55.0"
   }
 }

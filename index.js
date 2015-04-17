@@ -8,10 +8,16 @@ var Router = require("routes"),
   http = require('http'),
   url = require('url'),
   qs = require('querystring'),
-  Mock = require("mockjs");
+  Mock = require("mockjs"),
+  proxy = require('./lib/proxy');
 
 // 使用第三方的路由 https://github.com/aaronblohowiak/routes.js
-var router = Router();
+var router = Router(),
+    header = {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
+    };
 
 /**
  * 当 http 请求到达时，处理返回数据
@@ -33,16 +39,23 @@ var handle = function (req, res, match, options) {
 
   // 延迟输出
   setTimeout(function () {
+    res.writeHead(200, header);
     res.end(JSON.stringify(data));
   }, options.delay || 0);
 }
 
 // main
 var Server = function () {
+
+  // http 代理的默认配置
+  this.proxyDefault = {
+    urlRoot: '',
+    method: 'GET'
+  };
 }
 
 Server.prototype = {
-  // 添加 'get', 'post', 'delete', 'put' 路由
+  // 添加 'get', 'post', 'delete', 'put', 'patch' 路由
 
   // -----
   "get": function (path, options) {
@@ -70,9 +83,28 @@ Server.prototype = {
   },
 
   "patch": function (path, options) {
-    router.addRoute("patch" + path, function (req, res, match) {
+    router.addRoute("PATCH" + path, function (req, res, match) {
       handle(req, res, match, options);
     });
+  },
+
+  // 使用代理
+  'proxy': function (path, options) {
+    var method,
+        server = this;
+
+    options = options || {};
+    method = options.method || this.proxyDefault.method
+
+    router.addRoute(method + path, function (req, res, match) {
+      proxy(req, res, match, options, server);
+    });
+  },
+
+  setProxyDefault: function (proxyDefault) {
+    for(var key in proxyDefault) {
+      this.proxyDefault[key] = proxyDefault[key];
+    }
   },
 
   /**
@@ -105,19 +137,12 @@ Server.prototype = {
         dateString = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate() + ' ' + date.toLocaleTimeString();
 
       // 查找匹配的路由
-      var match = router.match(req.method + path),
-        header = {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
-        };
+      var match = router.match(req.method + path);
 
       if (match) {
         statusCode = 200;
         console.log(req.method, statusCode, req.url, dateString);
 
-        // 允许跨域访问
-        res.writeHead(statusCode, header);
         if (req.method === 'GET') {
           match.query = url.parse(req.url, true).query || {};
           match.fn(req, res, match);
@@ -145,6 +170,6 @@ Server.prototype = {
 
     console.log('Server running at http://' + (host || 'localhost') + ':' + port + '/');
   }
-}
+};
 
 module.exports = Server;
