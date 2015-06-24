@@ -22,28 +22,28 @@ var Server = require("ohana");
 var server = new Server();
 
 server.get('/article/', {
-		delay: 200,
-		data: function(params, query) {
-			console.log(params);
-			console.log(query);
+	delay: 200,
+	data: function(params, query) {
+		console.log(params);
+		console.log(query);
 
-			return {
-				"status": "ok",
-				"total_count": 100,
-				"data|10": [
-					{
-						"id|1-10000": 1,
-						"title": "@TITLE(5, 7)",
-						"author": "@NAME",
-						"post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
-						"read_count|0-1000": 100
-					}
-				]
-			}
+		return {
+			"status": "ok",
+			"total_count": 100,
+			"data|10": [
+				{
+					"id|1-10000": 1,
+					"title": "@TITLE(5, 7)",
+					"author": "@NAME",
+					"post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
+					"read_count|0-1000": 100
+				}
+			]
 		}
-	});
+	}
+});
 
-server.listen(3000);
+server.start(3000);
 
 ```
 ## API
