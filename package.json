@@ -1,6 +1,6 @@
 {
   "name": "ohana",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "A simple server that return fake json data for test",
   "main": "index.js",
   "scripts": {
