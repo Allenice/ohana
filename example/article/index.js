@@ -57,6 +57,7 @@ module.exports = function (server) {
           "id|1-10000": 1,
           "title": query.title,
           "author": query.author,
+          "content": query.content,
           "post_time": "@NOW"
         }
       }
@@ -73,13 +74,13 @@ module.exports = function (server) {
     }
   });
 
-  // 更新或添加一篇文章
+  // 更新一篇文章
   server.put('/article/:id', {
     data: function (params, query) {
       return {
         "status": "ok",
         "data": {
-          "id|1-10000": 1,
+          "id": params.id,
           "title": query.title,
           "author": query.author,
           "content": query.content,
@@ -95,7 +96,7 @@ module.exports = function (server) {
       return {
         "status": "ok",
         "data": {
-          "id|1-10000": 1,
+          "id": params.id,
           "title": query.title,
           "author": query.author,
           "content": query.content,

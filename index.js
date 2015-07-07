@@ -7,8 +7,9 @@
 var Router = require("routes"),
   http = require('http'),
   url = require('url'),
-  qs = require('querystring'),
   Mock = require("mockjs"),
+  formidable = require('formidable'),
+  extend = require('extend'),
   proxy = require('./lib/proxy');
 
 // 使用第三方的路由 https://github.com/aaronblohowiak/routes.js
@@ -101,6 +102,10 @@ Server.prototype = {
     });
   },
 
+  /**
+   * 设置默认代理参数
+   * @param proxyDefault
+   */
   setProxyDefault: function (proxyDefault) {
     for(var key in proxyDefault) {
       this.proxyDefault[key] = proxyDefault[key];
@@ -139,30 +144,36 @@ Server.prototype = {
       // 查找匹配的路由
       var match = router.match(req.method + path);
 
+      // 出错处理
+      function responseError(statusCode) {
+        console.log(req.method, statusCode, req.url, dateString);
+        res.writeHead(statusCode, header);
+        res.end(JSON.stringify({status: statusCode}));
+      }
+
       if (match) {
         statusCode = 200;
         console.log(req.method, statusCode, req.url, dateString);
 
+        // 获取 get 参数
+        match.query = url.parse(req.url, true).query || {};
+
         if (req.method === 'GET') {
-          match.query = url.parse(req.url, true).query || {};
           match.fn(req, res, match);
         } else {
-          var body = '';
-
-          req.on('data', function (data) {
-            body += data;
-          });
-
-          req.on('end', function () {
-            match.query = qs.parse(body);
+          // 获取非 get 的参数
+          var form = new formidable.IncomingForm();
+          form.parse(req, function(err, fields, files) {
+            if(err) {
+              responseError(500);
+            }
+            extend(match.query, fields, fields);
             match.fn(req, res, match);
           });
+
         }
       } else {
-        statusCode = 404;
-        console.log(req.method, statusCode, req.url, dateString);
-        res.writeHead(statusCode, header);
-        res.end(JSON.stringify({status: statusCode}));
+        responseError(404);
       }
 
 

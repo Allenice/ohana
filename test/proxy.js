@@ -1,13 +1,13 @@
 var testCase = require('nodeunit').testCase,
-    request = require('request');
+  request = require('request');
 
 // please run example before run test
 
-// example app.js domain
-var domain = 'http://localhost:3000/';
+// example app2.js domain, for proxy
+var domain = 'http://localhost:3004/';
 
 module.exports = testCase({
-  
+
   // test get
   'get': testCase({
 
@@ -15,7 +15,7 @@ module.exports = testCase({
     'getArticleList': function(test) {
       request({
         method: 'get',
-        url: domain + 'article/'
+        url: domain + 'article/?cat=3&act=get'
       }, function(err, response, body) {
         test.ok(!err, 'get article list error');
         test.equal(response.headers['content-type'], 'application/json; charset=utf-8', 'Api show return json data');
