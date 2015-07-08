@@ -7,7 +7,7 @@ var testCase = require('nodeunit').testCase,
 var domain = 'http://localhost:3000/';
 
 module.exports = testCase({
-  
+
   // test get
   'get': testCase({
 
@@ -118,6 +118,20 @@ module.exports = testCase({
         test.equal(data.author, article.author, 'author should equal');
         test.equal(data.title, article.title, 'title should equal');
         test.equal(data.content, article.content, 'content should equal');
+        test.done();
+      });
+    }
+  }),
+
+  // test before response
+  'beforeResponse': testCase({
+    'filterUser': function(test) {
+      request({
+        method: 'get',
+        url: domain + 'user/filter/'
+      }, function(err, response, body) {
+        test.ok(!err, 'get article list error');
+        test.equal(Object.prototype.toString.call(JSON.parse(body)), '[object Array]', 'should return array');
         test.done();
       });
     }

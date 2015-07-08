@@ -26,4 +26,20 @@ module.exports = function (server) {
     }
   });
 
+  // 输出数据之前，处理一下数据
+  server.get('/user/filter/', {
+    beforeResponse: function (data) {
+      return data.data;
+    },
+    data: function (params, query) {
+      return {
+        'data|10': [
+          {
+            'user_name': '@NAME'
+          }
+        ]
+      }
+    }
+  });
+
 }

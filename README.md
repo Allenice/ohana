@@ -22,25 +22,41 @@ var Server = require("ohana");
 var server = new Server();
 
 server.get('/article/', {
-	delay: 200,
-	data: function(params, query) {
-		console.log(params);
-		console.log(query);
+  delay: 200,
+  data: function(params, query) {
+    console.log(params);
+    console.log(query);
 
-		return {
-			"status": "ok",
-			"total_count": 100,
-			"data|10": [
-				{
-					"id|1-10000": 1,
-					"title": "@TITLE(5, 7)",
-					"author": "@NAME",
-					"post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
-					"read_count|0-1000": 100
-				}
-			]
-		}
-	}
+    return {
+      "status": "ok",
+      "total_count": 100,
+      "data|10": [
+        {
+          "id|1-10000": 1,
+          "title": "@TITLE(5, 7)",
+          "author": "@NAME",
+          "post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
+          "read_count|0-1000": 100
+        }
+      ]
+    }
+  }
+});
+
+// 输出数据之前，处理一下数据
+server.get('/user/filter/', {
+  beforeResponse: function (data) {
+    return data.data;
+  },
+  data: function (params, query) {
+    return {
+      'data|10': [
+        {
+          'user_name': '@NAME'
+        }
+      ]
+    }
+  }
 });
 
 server.start(3000);
@@ -52,26 +68,27 @@ server.start(3000);
 匹配 GET 方式的请求。
 
  - path: 路由匹配地址
- - options: 
-	 - delay: 延迟多少毫秒后返回，
-	 - data: 返回的数据，可以接受对象和方法, 方法中的参数 params 是路由匹配的参数，query 是提交或查询的参数。
-	 
+ - options:
+   - delay: 延迟多少毫秒后返回。
+   - beforeResponse: 数据输出之前处理数据。
+   - data: 返回的数据，可以接受对象和方法, 方法中的参数 params 是路由匹配的参数，query 是提交或查询的参数。
+
 ```javascript
 server.get('/article/:id', {
-	data: function (params, query) {
-		return {
-			"status": "ok",
-			"data": {
-				"id": params.id,
-				"title": "@TITLE(5, 7)",
-				"author": "@NAME",
-				"post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
-				"content": "@PARAGRAPH(2)",
-				"poster": "@IMAGE('700x350', '#ccc', '#000', 'hello world')",
-				"read_count|0-1000": 100
-			}
-		}
-	}
+  data: function (params, query) {
+    return {
+      "status": "ok",
+      "data": {
+        "id": params.id,
+        "title": "@TITLE(5, 7)",
+        "author": "@NAME",
+        "post_time": "@DATETIME('yyyy-MM-dd HH:mm:ss')",
+        "content": "@PARAGRAPH(2)",
+        "poster": "@IMAGE('700x350', '#ccc', '#000', 'hello world')",
+        "read_count|0-1000": 100
+      }
+    }
+  }
 });
 ```
 
@@ -88,16 +105,16 @@ server.get('/article/:id', {
 代理请求
 
  - path: 路由匹配地址
- - options: 
-	 - urlRoot:  目标服务器请求根目录，
-	 - method:  请求类型，GET | POST | PUT | PATCH | DELETE
-	 
+ - options:
+   - urlRoot:  目标服务器请求根目录，
+   - method:  请求类型，GET | POST | PUT | PATCH | DELETE
 
-	 
+
+
 ```javascript
 server.proxy('/article/:id', {
-	urlRoot: 'http://localhost:3000',
-	method: DELETE
+  urlRoot: 'http://localhost:3000',
+  method: DELETE
 });
 
 // 可以设置全局默认配置
@@ -135,8 +152,8 @@ server.proxy('/article/:id', {
 
 ```javascript
 server.register([
-	require('./article/index'),
-	require('./user/index')
+  require('./article/index'),
+  require('./user/index')
 ]);
 ```
 

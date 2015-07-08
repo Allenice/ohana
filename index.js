@@ -40,6 +40,12 @@ var handle = function (req, res, match, options) {
 
   // 延迟输出
   setTimeout(function () {
+
+    // 输出前处理数据
+    if(typeof options.beforeResponse === 'function') {
+      data = options.beforeResponse.call(this, data) || data;
+    }
+
     res.writeHead(200, header);
     res.end(JSON.stringify(data));
   }, options.delay || 0);
