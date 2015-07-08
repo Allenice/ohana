@@ -43,7 +43,7 @@ var handle = function (req, res, match, options) {
     res.writeHead(200, header);
     res.end(JSON.stringify(data));
   }, options.delay || 0);
-}
+};
 
 // main
 var Server = function () {
@@ -53,7 +53,7 @@ var Server = function () {
     urlRoot: '',
     method: 'GET'
   };
-}
+};
 
 Server.prototype = {
   // 添加 'get', 'post', 'delete', 'put', 'patch' 路由
@@ -95,7 +95,7 @@ Server.prototype = {
         server = this;
 
     options = options || {};
-    method = options.method || this.proxyDefault.method
+    method = options.method || this.proxyDefault.method;
 
     router.addRoute(method + path, function (req, res, match) {
       proxy(req, res, match, options, server);
