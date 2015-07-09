@@ -15,7 +15,6 @@ var Router = require("routes"),
 // 使用第三方的路由 https://github.com/aaronblohowiak/routes.js
 var router = Router(),
     header = {
-      'Content-Type': 'application/json; charset=utf-8',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
     };
@@ -27,8 +26,9 @@ var router = Router(),
  * @param {Object} match  - routers match, {query, params, splats, route, fn, next}
  * @param {Object} options - router handle options {delay, data}
  */
-var handle = function (req, res, match, options) {
-  var data;
+var handler = function (req, res, match, options) {
+  var data,
+      _this = this;
 
   // 使用 mock js 生成 json 数据， 可以接受 object 和 function
   if (typeof options.data === 'object') {
@@ -46,19 +46,34 @@ var handle = function (req, res, match, options) {
       data = options.beforeResponse.call(this, data) || data;
     }
 
-    res.writeHead(200, header);
+    // 设置 content-type
+    var resHeader = {
+      'Content-Type': _this.config.contentType
+    };
+    if(options.contentType) {
+      resHeader['Content-Type'] = options.contentType;
+    }
+
+    res.writeHead(200, extend(resHeader, header));
     res.end(JSON.stringify(data));
   }, options.delay || 0);
 };
 
 // main
-var Server = function () {
+var Server = function (options) {
 
-  // http 代理的默认配置
-  this.proxyDefault = {
-    urlRoot: '',
-    method: 'GET'
+  this.config = {
+    // 默认输出的 content-type
+    contentType: 'application/json; charset=utf-8',
+
+    // http 代理的默认配置
+    proxy: {
+      urlRoot: '',
+      method: 'GET'
+    }
   };
+
+  extend(true, this.config, options);
 };
 
 Server.prototype = {
@@ -66,32 +81,42 @@ Server.prototype = {
 
   // -----
   "get": function (path, options) {
+    var _this = this;
+
     router.addRoute("GET" + path, function (req, res, match) {
-      handle(req, res, match, options);
+      handler.call(_this, req, res, match, options);
     });
   },
 
   "post": function (path, options) {
+    var _this = this;
+
     router.addRoute("POST" + path, function (req, res, match) {
-      handle(req, res, match, options);
+      handler.call(_this, req, res, match, options);
     });
   },
 
   "delete": function (path, options) {
+    var _this = this;
+
     router.addRoute("DELETE" + path, function (req, res, match) {
-      handle(req, res, match, options);
+      handler.call(_this, req, res, match, options);
     });
   },
 
   "put": function (path, options) {
+    var _this = this;
+
     router.addRoute("PUT" + path, function (req, res, match) {
-      handle(req, res, match, options);
+      handler.call(_this, req, res, match, options);
     });
   },
 
   "patch": function (path, options) {
+    var _this = this;
+
     router.addRoute("PATCH" + path, function (req, res, match) {
-      handle(req, res, match, options);
+      handler.call(_this, req, res, match, options);
     });
   },
 
@@ -101,21 +126,11 @@ Server.prototype = {
         server = this;
 
     options = options || {};
-    method = options.method || this.proxyDefault.method;
+    method = options.method || this.config.proxy.method;
 
     router.addRoute(method + path, function (req, res, match) {
       proxy(req, res, match, options, server);
     });
-  },
-
-  /**
-   * 设置默认代理参数
-   * @param proxyDefault
-   */
-  setProxyDefault: function (proxyDefault) {
-    for(var key in proxyDefault) {
-      this.proxyDefault[key] = proxyDefault[key];
-    }
   },
 
   /**
@@ -138,6 +153,8 @@ Server.prototype = {
    * @param [host]
    */
   start: function (port, host) {
+    var _this = this;
+
     port = port || 8080;
 
     http.createServer(function (req, res) {
@@ -153,7 +170,10 @@ Server.prototype = {
       // 出错处理
       function responseError(statusCode) {
         console.log(req.method, statusCode, req.url, dateString);
-        res.writeHead(statusCode, header);
+        var resHeader = {
+          'Content-Type': _this.config.contentType
+        }
+        res.writeHead(statusCode, extend(resHeader, header));
         res.end(JSON.stringify({status: statusCode}));
       }
 

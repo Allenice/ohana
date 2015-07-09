@@ -1,14 +1,14 @@
 var Server = require("../index.js");
 
-var server = new Server();
+var server = new Server({
+  proxy: {
+    urlRoot: 'http://localhost:3000',
+    method: 'GET'
+  }
+});
 
 server.register([
   require('./proxy/index')
 ]);
-
-server.setProxyDefault({
-  urlRoot: 'http://localhost:3000',
-  method: 'GET'
-});
 
 server.start(3004);

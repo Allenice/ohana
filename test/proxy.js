@@ -121,6 +121,20 @@ module.exports = testCase({
         test.done();
       });
     }
+  }),
+
+  // test urlRoot
+  'urlRoot': testCase({
+    'ourbpApi': function(test) {
+      request({
+        method: 'get',
+        url: domain + '/PList/hotHospital/'
+      }, function(err, response, body) {
+        test.ok(!err, 'get hospital error');
+        test.done();
+      });
+    }
   })
+
 
 });

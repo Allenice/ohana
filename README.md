@@ -59,10 +59,31 @@ server.get('/user/filter/', {
   }
 });
 
+// 指定输出的 content-type
+// 返回 text/html 类型
+ server.get('/user/:id/tag', {
+   contentType: 'text/html',
+   beforeResponse: function(data) {
+     return data.tag;
+   },
+   data: {
+     tag: 'loli'
+   }
+ });
+
 server.start(3000);
 
 ```
 ## API
+
+### Server(options)
+Server构造函数
+
+ - options
+	 - contentType:  默认输出数据的 content-type
+	 - proxy:  代理请求参数
+		 - urlRoot:  目标服务器请求根目录，
+		 - method:  请求类型，GET | POST | PUT | PATCH | DELETE
 
 ### server.get(path, options)
 匹配 GET 方式的请求。
@@ -71,6 +92,7 @@ server.start(3000);
  - options:
    - delay: 延迟多少毫秒后返回。
    - beforeResponse: 数据输出之前处理数据。
+   - contentType:  响应数据的 content-type
    - data: 返回的数据，可以接受对象和方法, 方法中的参数 params 是路由匹配的参数，query 是提交或查询的参数。
 
 ```javascript
@@ -118,9 +140,11 @@ server.proxy('/article/:id', {
 });
 
 // 可以设置全局默认配置
-server.setProxyDefault({
-  urlRoot: 'http://localhost:3000',
-  method: 'GET'
+var server = new Server({
+  proxy: {
+    urlRoot: 'http://localhost:3000',
+    method: 'get'
+  }
 });
 
 // 之后可以省略配置

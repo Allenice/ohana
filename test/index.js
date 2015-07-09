@@ -8,6 +8,34 @@ var domain = 'http://localhost:3000/';
 
 module.exports = testCase({
 
+  // test before response
+  'beforeResponse': testCase({
+    'filterUser': function(test) {
+      request({
+        method: 'get',
+        url: domain + 'user/filter/'
+      }, function(err, response, body) {
+        test.ok(!err, 'get user list error');
+        test.equal(Object.prototype.toString.call(JSON.parse(body)), '[object Array]', 'should return array');
+        test.done();
+      });
+    }
+  }),
+
+  // test response content-type
+  'contentType': testCase({
+    'getUserTag': function(test) {
+      request({
+        method: 'get',
+        url: domain + 'user/1/tag'
+      }, function(err, response, body) {
+        test.ok(!err, 'get user tag error');
+        test.equal(response.headers['content-type'], 'text/html', 'Api show return text/html');
+        test.done();
+      });
+    }
+  }),
+
   // test get
   'get': testCase({
 
@@ -118,20 +146,6 @@ module.exports = testCase({
         test.equal(data.author, article.author, 'author should equal');
         test.equal(data.title, article.title, 'title should equal');
         test.equal(data.content, article.content, 'content should equal');
-        test.done();
-      });
-    }
-  }),
-
-  // test before response
-  'beforeResponse': testCase({
-    'filterUser': function(test) {
-      request({
-        method: 'get',
-        url: domain + 'user/filter/'
-      }, function(err, response, body) {
-        test.ok(!err, 'get article list error');
-        test.equal(Object.prototype.toString.call(JSON.parse(body)), '[object Array]', 'should return array');
         test.done();
       });
     }

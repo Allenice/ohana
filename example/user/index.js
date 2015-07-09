@@ -42,4 +42,15 @@ module.exports = function (server) {
     }
   });
 
+  // 返回 text/html 类型
+  server.get('/user/:id/tag', {
+    contentType: 'text/html',
+    beforeResponse: function(data) {
+      return data.tag;
+    },
+    data: {
+      tag: 'loli'
+    }
+  });
+
 }
