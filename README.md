@@ -15,6 +15,22 @@ ohana
 npm install ohana
 ```
 
+## Run test
+```base
+// 请先安装 nodeunit
+sudo npm install nodeunit -g
+
+// 安装依赖包
+npm install
+
+// 运行 example 的例子
+node app.js
+node app2.js
+
+// 运行测试
+npm test
+```
+
 ## 使用
 
 ```javascript

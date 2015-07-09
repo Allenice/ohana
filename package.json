@@ -1,6 +1,6 @@
 {
   "name": "ohana",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "A simple server that return fake json data for test",
   "main": "index.js",
   "scripts": {
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/Allenice/ohana",
   "dependencies": {
     "extend": "^3.0.0",
+    "nodeunit": "^0.9.1",
     "formidable": "^1.0.17",
     "mockjs": "~0.1.4",
     "request": "~2.55.0",
