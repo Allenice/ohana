@@ -149,6 +149,20 @@ module.exports = testCase({
         test.done();
       });
     }
-  })
+  }),
 
+  // test error handler
+  'onError': testCase({
+    '404': function (test) {
+      request({
+        method: 'get',
+        url: domain + '404/'
+      }, function (err, response, body) {
+        var data = JSON.parse(body);
+        test.equal(data.status, 404, '404 error should occur');
+        test.done();
+      });
+    }
+  })
+  
 });

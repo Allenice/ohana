@@ -62,9 +62,21 @@ var handler = function (req, res, match, options) {
 // main
 var Server = function (options) {
 
+  var _this = this;
+
   this.config = {
     // 默认输出的 content-type
     contentType: 'application/json; charset=utf-8',
+
+    // 出错处理
+    onError: function(req, res, statusCode) {
+      var resHeader = {
+        'Content-Type': _this.config.contentType
+      }
+      res.writeHead(statusCode, extend(resHeader, header));
+
+      res.end(JSON.stringify({status: statusCode}));
+    },
 
     // http 代理的默认配置
     proxy: {
@@ -134,6 +146,14 @@ Server.prototype = {
   },
 
   /**
+   * 解析模板数据
+   * @param dataTemplate - 模板数据
+   */
+  parseData: function(dataTemplate) {
+    return Mock.mock(dataTemplate);
+  },
+
+  /**
    * 注册 api
    * @param {Array[Function]} apiList - api 模块列表
    */
@@ -170,11 +190,7 @@ Server.prototype = {
       // 出错处理
       function responseError(statusCode) {
         console.log(req.method, statusCode, req.url, dateString);
-        var resHeader = {
-          'Content-Type': _this.config.contentType
-        }
-        res.writeHead(statusCode, extend(resHeader, header));
-        res.end(JSON.stringify({status: statusCode}));
+        _this.config.onError(req, res, statusCode);
       }
 
       if (match) {
