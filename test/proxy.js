@@ -4,7 +4,7 @@ var testCase = require('nodeunit').testCase,
 // please run example before run test
 
 // example app2.js domain, for proxy
-var domain = 'http://localhost:3004/';
+var domain = 'http://localhost:4001/';
 
 module.exports = testCase({
 

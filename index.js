@@ -7,7 +7,6 @@
 var Router = require("routes"),
   http = require('http'),
   url = require('url'),
-  Mock = require("mockjs"),
   formidable = require('formidable'),
   extend = require('extend'),
   proxy = require('./lib/proxy');
@@ -28,14 +27,15 @@ var router = Router(),
  */
 var handler = function (req, res, match, options) {
   var data,
+      parser = options.parser || this.config.parser,
       _this = this;
 
   // 使用 mock js 生成 json 数据， 可以接受 object 和 function
   if (typeof options.data === 'object') {
-    data = Mock.mock(options.data);
+    data = parser(options.data);
   } else if (typeof options.data === 'function') {
     // 如果是 function， 则传入路由参数 params 和 url 参数 query
-    data = Mock.mock(options.data(match.params, match.query));
+    data = parser(options.data(match.params, match.query));
   }
 
   // 延迟输出
@@ -65,6 +65,12 @@ var Server = function (options) {
   var _this = this;
 
   this.config = {
+
+    // 默认解析器，解析数据模板
+    parser: function(dataTemplate) {
+      return dataTemplate;
+    },
+
     // 默认输出的 content-type
     contentType: 'application/json; charset=utf-8',
 
@@ -143,14 +149,6 @@ Server.prototype = {
     router.addRoute(method + path, function (req, res, match) {
       proxy(req, res, match, options, server);
     });
-  },
-
-  /**
-   * 解析模板数据
-   * @param dataTemplate - 模板数据
-   */
-  parseData: function(dataTemplate) {
-    return Mock.mock(dataTemplate);
   },
 
   /**

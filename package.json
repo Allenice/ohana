@@ -1,6 +1,6 @@
 {
   "name": "ohana",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "A simple server that return fake json data for test",
   "main": "index.js",
   "scripts": {
@@ -13,7 +13,10 @@
   "keywords": [
     "nodejs",
     "server",
-    "fake-data"
+    "fake data",
+    "mock",
+    "madoka",
+    "json"
   ],
   "author": "Allenice Mo",
   "license": "MIT",
@@ -21,11 +24,14 @@
     "url": "https://github.com/Allenice/ohana/issues"
   },
   "homepage": "https://github.com/Allenice/ohana",
+  "devDependencies": {
+    "mockjs": "~0.1.4",
+    "madoka": "^1.0.1"
+  },
   "dependencies": {
     "extend": "^3.0.0",
     "nodeunit": "^0.9.1",
     "formidable": "^1.0.17",
-    "mockjs": "~0.1.4",
     "request": "~2.55.0",
     "routes": "~1.2.0"
   }

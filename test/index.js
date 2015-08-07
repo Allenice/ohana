@@ -4,7 +4,7 @@ var testCase = require('nodeunit').testCase,
 // please run example before run test
 
 // example app.js domain
-var domain = 'http://localhost:3000/';
+var domain = 'http://localhost:4000/';
 
 module.exports = testCase({
 
@@ -164,5 +164,5 @@ module.exports = testCase({
       });
     }
   })
-  
+
 });
