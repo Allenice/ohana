@@ -16,7 +16,7 @@ module.exports = function (server) {
       console.log(query);
 
       return [
-        '{{ repeat(10, 10) }}',
+        '{{ repeat(10) }}',
         {
           'id': '{{ index() }}',
           'title': '{{ lorem(1, "sentences") }}',

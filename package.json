@@ -26,7 +26,7 @@
   "homepage": "https://github.com/Allenice/ohana",
   "devDependencies": {
     "mockjs": "~0.1.4",
-    "madoka": "^1.0.1"
+    "madoka": "^1.0.2"
   },
   "dependencies": {
     "extend": "^3.0.0",
