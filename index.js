@@ -30,12 +30,12 @@ var handler = function (req, res, match, options) {
       parser = options.parser || this.config.parser,
       _this = this;
 
-  // 使用 mock js 生成 json 数据， 可以接受 object 和 function
-  if (typeof options.data === 'object') {
-    data = parser(options.data);
-  } else if (typeof options.data === 'function') {
+  // 使用 mock js 生成 json 数据， 可以接受function
+  if (typeof options.data === 'function') {
     // 如果是 function， 则传入路由参数 params 和 url 参数 query
     data = parser(options.data(match.params, match.query));
+  } else {
+    data = parser(options.data);
   }
 
   // 延迟输出
