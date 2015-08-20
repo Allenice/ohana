@@ -207,7 +207,7 @@ Server.prototype = {
             if(err) {
               responseError(500);
             }
-            extend(match.query, fields, fields);
+            extend(match.query, fields, files);
             match.fn(req, res, match);
           });
 
