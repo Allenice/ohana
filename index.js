@@ -11,6 +11,7 @@ var Router = require("routes"),
   extend = require('extend'),
   proxy = require('./lib/proxy');
 
+console.log('fun');
 // 使用第三方的路由 https://github.com/aaronblohowiak/routes.js
 var router = Router(),
     header = {
