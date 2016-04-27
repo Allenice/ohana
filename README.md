@@ -104,23 +104,23 @@ server.start(3000);
 Server constructor
 
  - `options`
-	 - `parser`:  default parser.  Every function like below can use as a parser.
+   - `parser`:  default parser.  Every function like below can use as a parser.
 
-		```javascript
-		function parser(dataTemplate) {
-		  // parse tempate logic
-		  var data = someOperate(dataTemplate);
+    ```javascript
+    function parser(dataTemplate) {
+      // parse tempate logic
+      var data = someOperate(dataTemplate);
 
-		  // return the parsed data.
-		  return data;
-		}
+      // return the parsed data.
+      return data;
+    }
 
-		```
-	 - `contentType`:  default content-type
-	 - `onError`:  handle error
-	 - `proxy`:   default proxy request config
-		 - `urlRoot`:  the root url of the target server
-		 - `method:`  request method，GET | POST | PUT | PATCH | DELETE
+    ```
+   - `contentType`:  default content-type
+   - `onError`:  handle error
+   - `proxy`:   default proxy request config
+     - `urlRoot`:  the root url of the target server
+     - `method:`  request method，GET | POST | PUT | PATCH | DELETE
 
 ### server.get(path, options)
 Listen a  GET request.
@@ -131,6 +131,7 @@ Listen a  GET request.
    - `delay`:  delay response. Unit is ms.
    - `beforeResponse`:  A function process data before response
    - `contentType`:  response content-type
+   - `statusCode`:  http status code
    - `data`:  data template.  It can be a function.  Function parameter 'params' matching routing parameters, 'query' is submitted or parameter query.
 
 ```javascript
@@ -371,22 +372,22 @@ server.start(3000);
 Server构造函数
 
  - `options`
-	 - `parser`: 默认数据模板解析器。任何像以下处理的方法都可以作为解析器
+   - `parser`: 默认数据模板解析器。任何像以下处理的方法都可以作为解析器
 
-		```javascript
-		function parser(dataTemplate) {
-		  // 解析数据模板的逻辑
-		  var data = someOperate(dataTemplate);
-		  // 返回解析后的数据
-		  return data;
-		}
+    ```javascript
+    function parser(dataTemplate) {
+      // 解析数据模板的逻辑
+      var data = someOperate(dataTemplate);
+      // 返回解析后的数据
+      return data;
+    }
 
-		```
-	 - `contentType`:  默认输出数据的 content-type
-	 - `onError`:  错误处理
-	 - `proxy`:  代理请求参数
-		 - `urlRoot`:  目标服务器请求根目录，
-		 - `method:`  请求类型，GET | POST | PUT | PATCH | DELETE
+    ```
+   - `contentType`:  默认输出数据的 content-type
+   - `onError`:  错误处理
+   - `proxy`:  代理请求参数
+     - `urlRoot`:  目标服务器请求根目录，
+     - `method:`  请求类型，GET | POST | PUT | PATCH | DELETE
 
 ### server.get(path, options)
 匹配 GET 方式的请求。
@@ -397,6 +398,7 @@ Server构造函数
    - `delay`: 延迟多少毫秒后返回。
    - `beforeResponse`: 数据输出之前处理数据。
    - `contentType`:  响应数据的 content-type
+   - `statusCode`: http 状态码
    - `data`: 返回的数据，可以接受方法, 方法中的参数 params 是路由匹配的参数，query 是提交或查询的参数。
 
 ```javascript
