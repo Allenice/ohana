@@ -54,7 +54,7 @@ var handler = function (req, res, match, options) {
       resHeader['Content-Type'] = options.contentType;
     }
 
-    res.writeHead(200, extend(resHeader, header));
+    res.writeHead(options.statusCode || 200, extend(resHeader, header));
     res.end(JSON.stringify(data));
   }, options.delay || 0);
 };

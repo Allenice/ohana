@@ -31,6 +31,18 @@ module.exports = function (server) {
     }
   });
 
+  // 获取文章列表
+  server.get('/article/404', {
+    statusCode: 404,
+    delay: 200,
+    data: function (params, query) {
+      return {
+        status: 404,
+        date: '{{ date(new Date(2014, 0, 1), "YYYY-MM-dd HH:mm:ss") }}'
+      }
+    }
+  });
+
   // 获取一篇文章, 使用 mock.js 解析
   server.get('/article/:id', {
     parser: Mock.mock,
