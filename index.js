@@ -137,6 +137,14 @@ Server.prototype = {
       handler.call(_this, req, res, match, options);
     });
   },
+  
+  "options": function (path, options) {
+    var _this = this;
+
+    router.addRoute("OPTIONS" + path, function (req, res, match) {
+      handler.call(_this, req, res, match, options);
+    });
+  },
 
   // 使用代理
   'proxy': function (path, options) {
