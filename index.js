@@ -15,7 +15,7 @@ var Router = require("routes"),
 var router = Router(),
     header = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
+      'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH, OPTIONS'
     };
 
 /**
