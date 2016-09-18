@@ -15,7 +15,8 @@ var Router = require("routes"),
 var router = Router(),
     header = {
       'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH'
+      'Access-Control-Allow-Methods': 'POST, GET, DELETE, PUT, PATCH, OPTIONS',
+      'Access-Control-Allow-Headers': 'X-Requested-With, Content-Type'
     };
 
 /**
@@ -134,6 +135,14 @@ Server.prototype = {
     var _this = this;
 
     router.addRoute("PATCH" + path, function (req, res, match) {
+      handler.call(_this, req, res, match, options);
+    });
+  },
+  
+  "options": function (path, options) {
+    var _this = this;
+
+    router.addRoute("OPTIONS" + path, function (req, res, match) {
       handler.call(_this, req, res, match, options);
     });
   },
